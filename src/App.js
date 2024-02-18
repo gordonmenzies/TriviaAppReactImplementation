@@ -61,19 +61,16 @@ function App() {
               nextQuestion()
             }
             else {
-              alert("false answers")
+              alert("Answer False")
+              nextQuestion()
             }
-          //}
         }
-     // }
 
       // When the correct answer is chosen move forward to the next question
       function nextQuestion() {
-        console.log("current question should equal 0 " + currentQuestion)
-        if (currentQuestion <= questions.length) {
+        if (currentQuestion < questions.length-1) {
           setCurrentQuestion(currentQuestion + 1)
           sortAnswers(currentQuestion + 1)
-          console.log("current question should equal + 1 " + currentQuestion)
         }
         else {
           alert("well done you have finished the test")
