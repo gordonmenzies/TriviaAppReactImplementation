@@ -1,11 +1,12 @@
 /*
         Features to add / Bugs to address 
           Create a feature to sort the answers so the left hand answer isn't always correct 
+            * Currently Sort Answers does not load in the first instance
           Build a Catch to make sure that the items properly load in before the game starts
           Build a counter to count the score 
           Build a message at the end of the game to congratulate the player and give them their score
 
-          Deal with True and False questions loadsing incorrectly 
+          Deal with True and False questions loading incorrectly 
           Manage symbols such as speechmarks loading incorrectly 
 
 
@@ -19,6 +20,7 @@ function App() {
 
   const [questions, setQuestions] = useState([])
   const [currentQuestion, setCurrentQuestion] = useState(0)
+  const [answers, setAnswers] = useState([])
 
       // ACCESS THE OPEN TDB API and store 10 answers in the questions array
     useEffect(() => {
@@ -34,12 +36,17 @@ function App() {
         })
         .then(data => {
           let i = 0
-          let tempProfiles = []
+          let listOfQuestions = []
           while (i < data.results.length) {
-            tempProfiles[i] = data.results[i]
+            listOfQuestions[i] = data.results[i]
             i++
           }
-          setQuestions(tempProfiles)
+          setQuestions(listOfQuestions)
+          const potentialAnswersTemp = listOfQuestions[currentQuestion].incorrect_answers.map((instance) => instance)
+          potentialAnswersTemp.push(listOfQuestions[currentQuestion].correct_answer)
+          potentialAnswersTemp.sort()
+          setAnswers(potentialAnswersTemp)
+
         })
       }, []);
 
@@ -62,9 +69,8 @@ function App() {
       // When the correct answer is chosen move forward to the next question
       function nextQuestion() {
         if (currentQuestion <= questions.length) {
-          console.log("current question if " + currentQuestion)
           setCurrentQuestion(currentQuestion + 1)
-          console.log("current Question if " + currentQuestion)
+          sortAnswers(currentQuestion)
         }
         else {
           alert("well done you have finished the test")
@@ -72,18 +78,25 @@ function App() {
         }
       }
 
+      function sortAnswers(currentQuestion) {
+        const listOfQuestions = questions
+        const potentialAnswersTemp = listOfQuestions[currentQuestion].incorrect_answers.map((instance) => instance)
+        potentialAnswersTemp.push(listOfQuestions[currentQuestion].correct_answer)
+        potentialAnswersTemp.sort()
+        setAnswers(potentialAnswersTemp)
+      }
+
       // do not start programme until all questions have loaded in
       if (questions.length > 9) {
-        console.log(questions)
-        console.log("checking questions[0]" + questions[0].correct_answer)
-        //  console.log(yesNoQuestions)
+        console.log("questions " + questions)
+        console.log("answers " + answers)
+        console.log("currentQuestion " + currentQuestion)
 
         return (
           <div className="App">
             <h1 id="title"> Welcome to The Trivia Game</h1>
             <Question q={questions[currentQuestion].question}
-                      correct={questions[currentQuestion].correct_answer}
-                      incorrect={questions[currentQuestion].incorrect_answers}
+                      answers={answers}
                       onChange={chosenAnswer}/>
           </div>
         );
