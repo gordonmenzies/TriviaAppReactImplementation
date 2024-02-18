@@ -7,7 +7,7 @@ function Question(props){
     function handleButtonClick(e) {
         // the value to be passed in we want to be what is written on the button that is pressed
         props.onChange(e.target.textContent)
-        console.log(props.answers)
+        console.log(props.correct)
        }
 
         return(

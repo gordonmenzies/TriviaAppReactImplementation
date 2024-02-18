@@ -1,8 +1,8 @@
 /*
         Features to add / Bugs to address 
-          Create a feature to sort the answers so the left hand answer isn't always correct 
-            * Currently Sort Answers does not load in the first instance
           Build a Catch to make sure that the items properly load in before the game starts
+            * gain a better understanding of useEffect before you can do this
+
           Build a counter to count the score 
           Build a message at the end of the game to congratulate the player and give them their score
 
@@ -41,6 +41,7 @@ function App() {
             listOfQuestions[i] = data.results[i]
             i++
           }
+          console.log(data.results)
           setQuestions(listOfQuestions)
           const potentialAnswersTemp = listOfQuestions[currentQuestion].incorrect_answers.map((instance) => instance)
           potentialAnswersTemp.push(listOfQuestions[currentQuestion].correct_answer)
@@ -68,9 +69,11 @@ function App() {
 
       // When the correct answer is chosen move forward to the next question
       function nextQuestion() {
+        console.log("current question should equal 0 " + currentQuestion)
         if (currentQuestion <= questions.length) {
           setCurrentQuestion(currentQuestion + 1)
-          sortAnswers(currentQuestion)
+          sortAnswers(currentQuestion + 1)
+          console.log("current question should equal + 1 " + currentQuestion)
         }
         else {
           alert("well done you have finished the test")
@@ -97,6 +100,7 @@ function App() {
             <h1 id="title"> Welcome to The Trivia Game</h1>
             <Question q={questions[currentQuestion].question}
                       answers={answers}
+                      correct={questions[currentQuestion].correct_answer}
                       onChange={chosenAnswer}/>
           </div>
         );
